@@ -77,6 +77,7 @@ Observation VisionService::findBinsML(cv::Mat img)
         boxes[i] = boxes[i] / scale;
     }
 
+    std::string classes[1] = {"bin"};        //list of classes (used later on when writing visualization text)
     // iterate over results and draw the boxes for visualization!
     for (int i=0; i<scores.size(); i++)
     {
@@ -91,7 +92,17 @@ Observation VisionService::findBinsML(cv::Mat img)
             float ymax = boxes[i*4+3];
             if (label == 0)
                 ROS_INFO("Found bin.");
-            cv::rectangle(img, {(int)xmin, (int)ymin}, {(int)xmax, (int)ymax}, {154, 209, 8}, 5);    //draws box of detection
+
+            // aesthetically visualize output box, label, and score
+            cv::Scalar color = {154, 209, 8};                                     //setup our color (blue,green,red)  (this is a turqoise color)
+            std::string text = classes[label] + '-' + std::to_string(score);      //setup our label: eg. "bin-0.9996"
+            int baseline = 0;                                                     //baseline variable that the getTextSize function outputs
+            cv::Size textSize = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseline);    //get our text size so we can be use it to draw aesthetic text
+            cv::rectangle(img, {(int)xmin, (int)ymin}, {(int)xmax, (int)ymax}, color, 1);              //draws detected bbox
+            cv::rectangle(img, {(int)xmin, (int)ymax - textSize.height - baseline},                    //draws a highlight behind text for ease of sight
+                          {(int)xmin + textSize.width, (int)ymax}, color, -1);
+            cv::putText(img, text, {(int)xmin, (int)ymax - baseline}, cv::FONT_HERSHEY_SIMPLEX, 0.5, {0, 0, 0}, 1);    //puts text on top of highlight
+
             log(img, 'e');                                                                           //logs the image
             return Observation(score, (ymin+ymax)/2, (xmin+xmax)/2, 0);                              //returns observation(score, ycenter, xcenter, 0)
         }
