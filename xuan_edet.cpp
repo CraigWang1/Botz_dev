@@ -7,7 +7,9 @@
 #include <iostream>
 
 // helper function to resize image while preserving aspect ratio
-void resize(cv::Mat &image, int image_size, float &scale) {     //returns scale value for rescaling boxes back later
+// also returns scale value for rescaling boxes back later
+void resize(cv::Mat &image, int image_size, float &scale)  
+{
     int image_height = image.rows;     //initialize image_height variable for convenience
     int image_width = image.cols;      //initialize image_width variable for convenience
 
@@ -27,8 +29,10 @@ void resize(cv::Mat &image, int image_size, float &scale) {     //returns scale 
     cv::resize(image, image, cv::Size(resized_width, resized_height));         //resize the image, keeping ratios
 }
 
-// helper function that resizes the image, processes the image, edits the scale as an output, and returns img_data std vector ready for model input
-std::vector<float> preprocess(cv::Mat image, int image_size) {
+// helper function that resizes the image, processes the image, 
+// edits the scale as an output, and returns img_data std vector ready for model input
+std::vector<float> preprocess(cv::Mat image, int image_size) 
+{
     // cv matrix process stuff
     image.convertTo(image, CV_32FC3);            //converts to float matrix so we can multiply and divide
     cv::Mat temp(image_size, image_size, CV_32FC3, cv::Scalar(128,128,128));   // makes temporary mat with shape (512,512,3) filled with 128s
