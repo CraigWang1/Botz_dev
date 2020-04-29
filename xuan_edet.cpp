@@ -8,11 +8,10 @@
 
 // helper function to resize image while preserving aspect ratio
 // also returns scale value for rescaling boxes back later
-void resize(cv::Mat &image, int image_size, float &scale)  
+void VisionService::resize(cv::Mat &image, int image_size, float &scale)
 {
     int image_height = image.rows;     //initialize image_height variable for convenience
     int image_width = image.cols;      //initialize image_width variable for convenience
-
     int resized_height, resized_width;    //declare resized_height, resized_width variables to use in the if/else statements
 
     // calculates what height and width to resize to preserve height/width ratios
@@ -29,9 +28,9 @@ void resize(cv::Mat &image, int image_size, float &scale)
     cv::resize(image, image, cv::Size(resized_width, resized_height));         //resize the image, keeping ratios
 }
 
-// helper function that resizes the image, processes the image, 
+// helper function that resizes the image, processes the image,
 // edits the scale as an output, and returns img_data std vector ready for model input
-std::vector<float> preprocess(cv::Mat image, int image_size) 
+std::vector<float> VisionService::preprocess(cv::Mat image, int image_size)
 {
     // cv matrix process stuff
     image.convertTo(image, CV_32FC3);            //converts to float matrix so we can multiply and divide
