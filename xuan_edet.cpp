@@ -67,7 +67,8 @@ Observation VisionService::findBinsML(cv::Mat img)
 
     // read image
     cv::Mat inp;                                              //input image that we process
-    img.copyTo(inp);
+    img.copyTo(inp);                                 
+    cv::cvtColor(inp, inp, CV_BGR2RGB);                       //convert from bgr to rgb image
     float scale;   //init scale variable that will be used to scale back out boxes to original image
 
     //process image
