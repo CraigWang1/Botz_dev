@@ -55,9 +55,10 @@ Observation VisionService::findBinsML(cv::Mat img)
 
     //IMPORTANT: Edit architecture of model (eg. efficientdet-d3 -> phi=3)
     int phi = 0;
-    int image_sizes[7] = {512, 640, 768, 896, 1024, 1152, 1280};     //image sizes that effdet uses
+    int image_sizes[7] = {512, 640, 768, 896, 1024, 1152, 1280};      //image sizes that effdet uses
     int image_size = image_sizes[phi];                                //takes the image size that our model uses
-    std::string classes[1] = {"bin"};        //list of classes
+    std::string classes[1] = {"bin"};                                 //list of classes
+    cv::Scalar color = {154, 209, 8};                                 //setup our color (blue,green,red)
 
     // inititialize the model's input and output tensors
     auto inpName = new Tensor(model, "input_1");
@@ -106,7 +107,6 @@ Observation VisionService::findBinsML(cv::Mat img)
                 ROS_INFO("Found bin.");
 
             // aesthetically visualize output box, label, and score
-            cv::Scalar color = {154, 209, 8};                                     //setup our color (blue,green,red)
             std::string text = classes[label] + '-' + std::to_string(score);      //setup our label: eg. "bin-0.9996"
             int baseline = 0;                                                     //baseline variable that the getTextSize function outputs
             cv::Size textSize = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseline);    //get our text size so we can be use it to draw aesthetic text
