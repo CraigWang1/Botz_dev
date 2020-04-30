@@ -123,5 +123,5 @@ Observation VisionService::findBinsML(cv::Mat img)
         }                 //so we can afford to break out because all the other outputs will be below the threshold
     }
 
-    return 0;
+    return Observation(0, 0, 0, 0);
 }
