@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-void VisionService::resize(cv::Mat &image, int image_size, float &scale)
+void resize(cv::Mat &image, int image_size, float &scale)
 {
 	/*
 	 * This is a helper function to resize image while preserving aspect ratio;
@@ -31,7 +31,7 @@ void VisionService::resize(cv::Mat &image, int image_size, float &scale)
 }
 
 
-std::vector<float> VisionService::preprocess(cv::Mat image, int image_size)
+std::vector<float> preprocess(cv::Mat image, int image_size)
 {
 	/*
 	 * This is a helper function that normalizes the image
@@ -78,9 +78,9 @@ Observation VisionService::findBinsML(cv::Mat img)
     	float scale;                                              //init scale variable that will be used to scale back out boxes to original image
 
     	//process image
-    	VisionService::resize(inp, image_size, scale);                             //resize, preserve aspect ratio
+    	resize(inp, image_size, scale);                             //resize, preserve aspect ratio
     	//underwaterEnhance(inp);                                                  //phoebe enhance
-    	std::vector<float> img_data = VisionService::preprocess(inp, image_size);  //normalize image for model input
+    	std::vector<float> img_data = preprocess(inp, image_size);  //normalize image for model input
 
     	// Put data in tensor.
     	inpName->set_data(img_data, {1, image_size, image_size, 3});
