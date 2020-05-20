@@ -8,17 +8,17 @@
 
 void drawBox(cv::Mat &img, float xmin, float ymin, float xmax, float ymax, std::string classes[], int label, float score, std::vector<cv::Scalar> colors)
 {
-      /*
-       * Helper function to aesthetically draw detected bounding box.
-       */
-      std::string text = classes[label] + '-' + std::to_string(score);      //setup our label: eg. "bin-0.9996"
-      cv::Scalar color = colors[label];                                     //assign color to class
-      int baseline = 0;                                                     //baseline variable that the getTextSize function outputs
-      cv::Size textSize = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseline);    //get our text size so we can be use it to draw aesthetic text
-      cv::rectangle(img, {(int)xmin, (int)ymin}, {(int)xmax, (int)ymax}, color, 3);              //draws detected bbox
-      cv::rectangle(img, {(int)xmin, (int)ymax - textSize.height - baseline},                    //draws a highlight behind text for ease of sight
-                    {(int)xmin + textSize.width, (int)ymax}, color, -1);
-      cv::putText(img, text, {(int)xmin, (int)ymax - baseline}, cv::FONT_HERSHEY_SIMPLEX, 0.5, {0, 0, 0}, 1);    //puts text on top of highlight
+    /*
+    * Helper function to aesthetically draw detected bounding box.
+    */
+    std::string text = classes[label] + '-' + std::to_string(score);      //setup our label: eg. "bin-0.9996"
+    cv::Scalar color = colors[label];                                     //assign color to class
+    int baseline = 0;                                                     //baseline variable that the getTextSize function outputs
+    cv::Size textSize = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseline);    //get our text size so we can be use it to draw aesthetic text
+    cv::rectangle(img, {(int)xmin, (int)ymin}, {(int)xmax, (int)ymax}, color, 3);              //draws detected bbox
+    cv::rectangle(img, {(int)xmin, (int)ymax - textSize.height - baseline},                    //draws a highlight behind text for ease of sight
+                {(int)xmin + textSize.width, (int)ymax}, color, -1);
+    cv::putText(img, text, {(int)xmin, (int)ymax - baseline}, cv::FONT_HERSHEY_SIMPLEX, 0.5, {0, 0, 0}, 1);    //puts text on top of highlight
 }
 
 float resize(cv::Mat &image, int image_size)
