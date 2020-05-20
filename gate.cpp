@@ -46,7 +46,7 @@ Observation VisionService::findGateML(cv::Mat img)
 
 			// Aesthetically visualize output box, label, and score
 			drawBox(img, xmin, ymin, xmax, ymax, classes, label, score, colors);
-			//logs image
+			// Logs image
 			log(img, 'e');                                                                       
 
 			// Change bbox values back to original image to calculate accurate angles
