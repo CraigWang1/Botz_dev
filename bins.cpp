@@ -91,7 +91,7 @@ Observation VisionService::findBinsML(cv::Mat img)
 
     // Assumes image is already processed from image acquisition; if it's not, process here
     if (img.cols != image_size)
-        resize(img, image_size);                      //downsize for model compatibility, scale factor is for resizing boxes back to og image later
+        resize(img, image_size);                      //downsize for model compatibility
         underwaterEnhance(img);                       //phoebe enhance on small img to avoid time complexity
 
     // Prepare image for model input
