@@ -75,10 +75,11 @@ Observation VisionService::findBinsML(cv::Mat img)
     ROS_INFO("Starting machine learning detection for BIN.");
     log(img, 'd');
 
-    //IMPORTANT: Edit architecture of model (eg. efficientdet-d3 -> phi=3)
+    // IMPORTANT: Edit architecture of model (eg. efficientdet-d3 -> phi=3)
     int phi = 0;
     int image_sizes[] = {512, 640, 768, 896, 1024, 1152, 1280};      //image sizes that effdet uses
     int image_size = image_sizes[phi];                               //takes the image size that our model uses
+    float scale = (float)image_size / DIMG_DIM[1];                   //scale factor to rescale boxes back to original img for accurate angle calculation (eg. 512/1288 for down cam)
     std::string classes[] = {"bin"};                                 //list of classes
     std::vector<cv::Scalar> colors = {{0, 255, 255}};                //setup our box color (blue,green,red) (this is yellow)
 
@@ -88,10 +89,13 @@ Observation VisionService::findBinsML(cv::Mat img)
     auto out_scores = new Tensor(model, "filtered_detections/map/TensorArrayStack_1/TensorArrayGatherV3");
     auto out_labels = new Tensor(model, "filtered_detections/map/TensorArrayStack_2/TensorArrayGatherV3");
 
-    // Process image
-    cv::Mat inp;                                                //model input image
-    float scale = resize(img, image_size);                      //downsize for model compatibility, scale factor is for resizing boxes back to og image later
-    underwaterEnhance(img);                                     //phoebe enhance on small img to avoid time complexity
+    // Assumes image is already processed from image acquisition; if it's not, process here
+    if (img.cols != image_size)
+        resize(img, image_size);                      //downsize for model compatibility, scale factor is for resizing boxes back to og image later
+        underwaterEnhance(img);                       //phoebe enhance on small img to avoid time complexity
+
+    // Prepare image for model input
+    cv::Mat inp;
     cv::cvtColor(img, inp, CV_BGR2RGB);                         //copy and convert from bgr to rgb
     std::vector<float> img_data = preprocess(inp, image_size);  //normalize image for model input
 
@@ -121,10 +125,10 @@ Observation VisionService::findBinsML(cv::Mat img)
 
             // Aesthetically visualize output box, label, and score
             drawBox(img, xmin, ymin, xmax, ymax, classes, label, score, colors);
-            // Logs image
+            // Logs detection
             log(img, 'e');                                                                       
 
-            // Change bbox values back to original image to calculate accurate angles
+            // Change bbox coords back to original image to calculate accurate angles
             xmin /= scale; 
             ymin /= scale;
             xmax /= scale;
