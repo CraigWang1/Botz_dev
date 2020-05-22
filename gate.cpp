@@ -7,7 +7,7 @@ Observation VisionService::findBinsML(cv::Mat img)
     int image_sizes[] = {512, 640, 768, 896, 1024, 1152, 1280};      //image sizes that effdet uses
     int image_size = image_sizes[phi];                               //takes the image size that our model uses
     float scale = (float)image_size / FIMG_DIM[1];                   //scale factor to rescale boxes back to original img for accurate angle calculation (eg. 512/1288 for down cam)
-    std::string classes[] = {"gate"};                                 //list of classes
+    std::string classes[] = {"gate"};                                //list of classes
     std::vector<cv::Scalar> colors = {{0, 255, 255}};                //setup our box color (blue,green,red) (this is yellow)
 
     // Inititialize the model's input and output tensors
@@ -18,7 +18,7 @@ Observation VisionService::findBinsML(cv::Mat img)
 
     // Assumes image is already processed from image acquisition; if it's not, process here
     if (img.cols != image_size)
-        resize(img, image_size);                      //downsize for model compatibility, scale factor is for resizing boxes back to og image later
+        resize(img, image_size);                      //downsize for model compatibility
         underwaterEnhance(img);                       //phoebe enhance on small img to avoid time complexity
 
     // Prepare image for model input
